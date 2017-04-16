@@ -11,7 +11,9 @@ build/
 *.prefs
 
 *.iml
-.idea
+*.ipr
+*.iws
+.idea/
 
 .nb-gradle
 .nb-gradle-properties
