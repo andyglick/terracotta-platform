@@ -71,5 +71,4 @@ public class DefaultStatisticQueryBuilder implements StatisticQuery.Builder {
     }
     return newBuilder;
   }
-
 }

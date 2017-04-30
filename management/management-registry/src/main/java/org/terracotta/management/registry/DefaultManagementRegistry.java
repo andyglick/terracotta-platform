@@ -55,6 +55,7 @@ public class DefaultManagementRegistry implements ManagementRegistry {
         throw new IllegalStateException("Duplicated management provider name : " + name);
       }
     }
+
     managementProviders.add(provider);
   }
 

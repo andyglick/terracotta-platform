@@ -37,6 +37,8 @@ import static org.mockito.Mockito.when;
  */
 public class DefaultCallQueryTest {
 
+  private static final String oops = "Oops, that was not supposed to happen !";
+
   @Test
   public void execute_handles_unexpected_exceptions() throws Exception {
     final Context context = Context.create("key", "val");
@@ -48,27 +50,26 @@ public class DefaultCallQueryTest {
     //necessary mock
     ManagementProvider<?> managementProvider = mock(ManagementProvider.class);
     when(managementProvider.supports(context)).thenReturn(true);
-    RuntimeException runtimeException = new RuntimeException("Oups, that was not supposed to happen !");
+    RuntimeException runtimeException = new RuntimeException(oops);
     when(managementProvider.callAction(context, "myMethodName", String.class, parameters)).thenThrow(runtimeException);
 
     CapabilityManagementSupport capabilityManagementSupport = mock(CapabilityManagementSupport.class);
-    Collection<ManagementProvider<?>> managementProviders = new ArrayList<ManagementProvider<?>>();
+    Collection<ManagementProvider<?>> managementProviders = new ArrayList<>();
     managementProviders.add(managementProvider);
     when(capabilityManagementSupport.getManagementProvidersByCapability("myCapabilityName")).thenReturn(managementProviders);
 
-    DefaultCallQuery<String> defaultCallQuery = new DefaultCallQuery<String>(capabilityManagementSupport, "myCapabilityName", "myMethodName", String.class, parameters, contexts);
+    DefaultCallQuery<String> defaultCallQuery = new DefaultCallQuery<>(capabilityManagementSupport, "myCapabilityName", "myMethodName", String.class,
+      parameters, contexts);
     ResultSet executeResults = defaultCallQuery.execute();
 
     ContextualReturn singleResult = (ContextualReturn) executeResults.getSingleResult();
+
     try {
       singleResult.getValue();
       fail();
     } catch (Exception e) {
       assertThat(e, is(instanceOf(ExecutionException.class)));
-      assertThat(e.getMessage(), equalTo("Oups, that was not supposed to happen !"));
+      assertThat(e.getMessage(), equalTo(oops));
     }
-
   }
-
-
 }

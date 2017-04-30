@@ -37,7 +37,7 @@ public final class ContextualStatistics implements Contextual {
   private Context context;
 
   public ContextualStatistics(String capability, Context context, Map<String, Number> statistics) {
-    this.statistics = new HashMap<String, Number>(Objects.requireNonNull(statistics));
+    this.statistics = new HashMap<>(Objects.requireNonNull(statistics));
     this.context = Objects.requireNonNull(context);
     this.capability = Objects.requireNonNull(capability);
   }
@@ -93,16 +93,16 @@ public final class ContextualStatistics implements Contextual {
   }
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(Object o)
+  {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
 
     ContextualStatistics that = (ContextualStatistics) o;
 
-    if (!statistics.equals(that.statistics)) return false;
-    if (!capability.equals(that.capability)) return false;
-    return context.equals(that.context);
-
+    return statistics.equals(that.statistics)
+      && capability.equals(that.capability)
+      && context.equals(that.context);
   }
 
   @Override
@@ -112,5 +112,4 @@ public final class ContextualStatistics implements Contextual {
     result = 31 * result + context.hashCode();
     return result;
   }
-
 }

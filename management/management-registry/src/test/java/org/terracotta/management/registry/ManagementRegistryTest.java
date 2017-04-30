@@ -80,11 +80,11 @@ public class ManagementRegistryTest {
     }
   }
 
+  @SuppressWarnings("unused")
   public static abstract class CapabilityContextMixin {
     @JsonIgnore
     public abstract Collection<String> getRequiredAttributeNames();
     @JsonIgnore
     public abstract Collection<CapabilityContext.Attribute> getRequiredAttributes();
   }
-
 }

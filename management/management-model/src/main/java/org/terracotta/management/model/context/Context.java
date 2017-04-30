@@ -30,7 +30,7 @@ public class Context extends AbstractMap<String, String> implements Serializable
 
   private static final long serialVersionUID = 1;
 
-  private final Map<String, String> back = new LinkedHashMap<String, String>();
+  private final Map<String, String> back = new LinkedHashMap<>();
 
   private Context(Map<String, String> back) {
     this.back.putAll(back);
@@ -64,10 +64,12 @@ public class Context extends AbstractMap<String, String> implements Serializable
     return back.get(key);
   }
 
+  @Override
   public int size() {
     return back.size();
   }
 
+  @Override
   public boolean isEmpty() { return back.isEmpty(); }
 
   @Override
@@ -114,6 +116,6 @@ public class Context extends AbstractMap<String, String> implements Serializable
   }
 
   public static Context empty() {
-    return new Context(Collections.<String, String>emptyMap());
+    return new Context(Collections.emptyMap());
   }
 }

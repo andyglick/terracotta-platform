@@ -29,6 +29,7 @@ public class DefaultResultSet<T> implements ResultSet<T> {
 
   private final Map<Context, T> results;
 
+  @SuppressWarnings("WeakerAccess")
   public DefaultResultSet(Map<Context, T> results) {
     this.results = Collections.unmodifiableMap(results);
   }

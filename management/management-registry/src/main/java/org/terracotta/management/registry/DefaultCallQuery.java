@@ -38,12 +38,13 @@ public class DefaultCallQuery<T> implements CallQuery<T> {
   private final Collection<Context> contexts;
   private final Class<T> returnType;
 
+  @SuppressWarnings("WeakerAccess")
   public DefaultCallQuery(CapabilityManagementSupport capabilityManagement, String capabilityName, String methodName, Class<T> returnType, Parameter[] parameters, Collection<Context> contexts) {
     this.capabilityManagement = capabilityManagement;
     this.capabilityName = capabilityName;
     this.methodName = methodName;
     this.parameters = parameters;
-    this.contexts = Collections.unmodifiableCollection(new ArrayList<Context>(contexts));
+    this.contexts = Collections.unmodifiableCollection(new ArrayList<>(contexts));
     this.returnType = returnType;
 
     if(contexts.isEmpty()) {
@@ -78,7 +79,7 @@ public class DefaultCallQuery<T> implements CallQuery<T> {
 
   @Override
   public ResultSet<ContextualReturn<T>> execute() {
-    Map<Context, ContextualReturn<T>> contextualResults = new LinkedHashMap<Context, ContextualReturn<T>>(contexts.size());
+    Map<Context, ContextualReturn<T>> contextualResults = new LinkedHashMap<>(contexts.size());
     Collection<ManagementProvider<?>> managementProviders = capabilityManagement.getManagementProvidersByCapability(capabilityName);
 
     for (Context context : contexts) {
@@ -99,7 +100,6 @@ public class DefaultCallQuery<T> implements CallQuery<T> {
       contextualResults.put(context, result);
     }
 
-    return new DefaultResultSet<ContextualReturn<T>>(contextualResults);
+    return new DefaultResultSet<>(contextualResults);
   }
-
 }

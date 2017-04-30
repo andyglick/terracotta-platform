@@ -16,6 +16,7 @@
 package org.terracotta.management.registry;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import org.slf4j.Logger;
@@ -41,23 +42,29 @@ public class CapabilityManagementTest
   @SuppressWarnings("FieldCanBeLocal")
   private String capabilityName = "cacheRestructuring";
 
+  @SuppressWarnings("FieldCanBeLocal")
+  private ContextContainer contextContainer;
+
+  private Context context;
+  private Collection<Context> contexts;
+  private ManagementRegistry managementRegistry;
+
   @Before
   public void setUp() {
 
+    context = Context.create("innerKey", "innerValue");
+
+    contexts = Collections.singletonList(context);
+
+    contextContainer = new ContextContainer("outerKey", "outerValue");
+
+    managementRegistry = new DefaultManagementRegistry(contextContainer);
   }
 
   @Test
   public void testCapabilityManagement() {
 
-    Context context = Context.create("innerKey", "innerValue");
-
-    Collection<Context> contexts = Collections.singletonList(context);
-
-    ContextContainer contextContainer = new ContextContainer("outerKey", "outerValue");
-
-    CapabilityManagementSupport capabilityManagementSupport = new DefaultManagementRegistry(contextContainer);
-
-    DefaultCapabilityManagement defaultCapabilityManagement = new DefaultCapabilityManagement(capabilityManagementSupport, capabilityName);
+    DefaultCapabilityManagement defaultCapabilityManagement = new DefaultCapabilityManagement(managementRegistry, capabilityName);
 
     StatisticQuery.Builder queryBuilder = defaultCapabilityManagement.queryStatistic("FFR");
 
@@ -72,5 +79,11 @@ public class CapabilityManagementTest
     assertThat(contextualStatistics.getCapability()).isEqualTo("cacheRestructuring");
     assertThat(contextualStatistics.isEmpty()).isTrue();
     assertThat(contextualStatistics.size()).isEqualTo(0);
+  }
+
+  @Test
+  @Ignore
+  public void testManagmentProviders() {
+
   }
 }
