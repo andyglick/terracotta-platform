@@ -80,22 +80,39 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>jaxb2-maven-plugin</artifactId>
+        <groupId>org.jvnet.jaxb2.maven2</groupId>
+        <artifactId>maven-jaxb2-plugin</artifactId>
         <executions>
           <execution>
-            <id>xjc</id>
-            <phase>generate-sources</phase>
             <goals>
-              <goal>xjc</goal>
+              <goal>generate</goal>
             </goals>
           </execution>
         </executions>
         <configuration>
-          <packageName>org.terracotta.offheapresource.config</packageName>
-          <sources>
-            <source>${basedir}/src/main/resources/offheap-resource.xsd</source>
-          </sources>
+          <strict>false</strict>
+          <schemaDirectory>src/main/resources</schemaDirectory>
+          <schemaIncludes>
+            <include>*.xsd</include>
+          </schemaIncludes>
+          <generatePackage>org.terracotta.offheapresource.config</generatePackage>
+          <catalogs>
+            <catalog>
+              <dependencyResource>
+                <groupId>org.terracotta</groupId>
+                <artifactId>tcconfig-schema</artifactId>
+                <version>${tcconfig.version}</version>
+                <resource>catalog.cat</resource>
+              </dependencyResource>
+            </catalog>
+          </catalogs>
+          <episodes>
+            <episode>
+              <groupId>org.terracotta</groupId>
+              <artifactId>tcconfig-schema</artifactId>
+              <version>${tcconfig.version}</version>
+            </episode>
+          </episodes>
         </configuration>
       </plugin>
     </plugins>
