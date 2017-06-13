@@ -34,6 +34,8 @@ import java.util.Properties;
  */
 class Utils {
 
+  private Utils(){}
+
   static Connection createConnection(String name, String uri) throws ConnectionException {
     Properties properties = new Properties();
     properties.setProperty(ConnectionPropertyNames.CONNECTION_NAME, name);

@@ -18,7 +18,7 @@ package org.terracotta.management.entity.sample;
 import org.terracotta.voltron.proxy.ConcurrencyStrategy;
 import org.terracotta.voltron.proxy.ExecutionStrategy;
 
-import static org.terracotta.voltron.proxy.ConcurrencyStrategy.*;
+import static org.terracotta.voltron.proxy.ConcurrencyStrategy.UNIVERSAL_KEY;
 import static org.terracotta.voltron.proxy.ExecutionStrategy.Location.ACTIVE;
 import static org.terracotta.voltron.proxy.ExecutionStrategy.Location.BOTH;
 

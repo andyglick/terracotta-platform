@@ -62,7 +62,8 @@ public class CacheFactory implements Closeable {
     return management.getManagementRegistry();
   }
 
-  public void init() throws ConnectionException, ExecutionException, InterruptedException, TimeoutException {
+  public void init() throws Exception
+  {
     // connects to server
     Properties properties = new Properties();
     properties.setProperty(ConnectionPropertyNames.CONNECTION_NAME, uri.getPath().substring(1));

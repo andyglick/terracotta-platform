@@ -37,6 +37,7 @@
       <artifactId>clustered-map-common</artifactId>
       <version>${project.version}</version>
     </dependency>
+
     <dependency>
       <groupId>org.terracotta</groupId>
       <artifactId>entity-common-api</artifactId>

@@ -86,11 +86,10 @@ public abstract class AbstractManagementProvider<T> implements ManagementProvide
   @Override
   public void unregister(T managedObject) {
     for (ExposedObject<T> exposedObject : exposedObjects) {
-      if (exposedObject.getTarget().equals(managedObject)) {
-        if (this.exposedObjects.remove(exposedObject)) {
-          dispose(exposedObject);
-          return;
-        }
+      if (exposedObject.getTarget().equals(managedObject) && this.exposedObjects.remove(exposedObject))
+      {
+        dispose(exposedObject);
+        return;
       }
     }
   }

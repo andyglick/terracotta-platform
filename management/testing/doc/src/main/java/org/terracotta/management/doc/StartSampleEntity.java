@@ -28,24 +28,40 @@ import java.util.concurrent.TimeoutException;
  * @author Mathieu Carbou
  */
 public class StartSampleEntity {
-  public static void main(String[] args) throws ConnectionException, ExecutionException, TimeoutException, InterruptedException {
-    CacheFactory cacheFactory = new CacheFactory(URI.create("terracotta://localhost:9510/pet-clinic"));
 
-    cacheFactory.init();
+  public static void main(String[] args) throws Exception
+  {
+    CacheFactory cacheFactory = null;
 
-    Cache pets = cacheFactory.getCache("pets");
+    try
+    {
+      cacheFactory = new CacheFactory(URI.create("terracotta://localhost:9510/pet-clinic"));
 
-    while (true) {
+      cacheFactory.init();
 
-      String key = "pet-" + new Random().nextInt(100);
-      System.out.println("put(" + key + ")");
-      pets.put(key, "Garfield");
+      Cache pets = cacheFactory.getCache("pets");
 
-      key = "pet-" + new Random().nextInt(100);
-      System.out.println("get(" + key + ")");
-      pets.get(key);
+      while (true) {
 
-      Thread.sleep(1_000);
+        String key = "pet-" + new Random().nextInt(100);
+        System.out.println("put(" + key + ")");
+        pets.put(key, "Garfield");
+
+        key = "pet-" + new Random().nextInt(100);
+        System.out.println("get(" + key + ")");
+        pets.get(key);
+
+        Thread.sleep(1_000);
+      }
+    }
+    finally
+    {
+      if (cacheFactory != null)
+      {
+        System.out.println("cacheFactory is " + cacheFactory);
+        // cacheFactory.destroyCache("terracotta://localhost:9510/pet-clinic");
+        //  cacheFactory.close();
+      }
     }
 
   }

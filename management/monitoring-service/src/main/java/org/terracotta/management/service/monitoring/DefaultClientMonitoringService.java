@@ -108,21 +108,37 @@ class DefaultClientMonitoringService implements ClientMonitoringService, Topolog
     }
   }
 
+  @Override
+  public void onEntityDestroyed(long consumerId) {
+    if (consumerId == this.consumerId) {
+      LOGGER.trace("[{}] onEntityDestroyed()", this.consumerId);
+      clear();
+    }
+  }
+
+  @Override
+  public void onEntityCreated(long consumerId) {
+    // nothing to do in this case
+  }
+
   void fireMessage(Message message) {
-    switch (message.getType()) {
 
-      case "MANAGEMENT_CALL":
-        Context context = message.unwrap(Contextual.class).get(0).getContext();
-        for (Map.Entry<ClientDescriptor, Context> entry : manageableClients.entrySet()) {
-          if (context.contains(entry.getValue())) {
-            send(entry.getKey(), message);
-            break;
-          }
+    if ("MANAGEMENT_CALL".equals(message.getType()))
+    {
+
+      Context context = message.unwrap(Contextual.class).get(0).getContext();
+
+      for (Map.Entry<ClientDescriptor, Context> entry : manageableClients.entrySet())
+      {
+        if (context.contains(entry.getValue()))
+        {
+          send(entry.getKey(), message);
         }
-        break;
-
-      default:
-        throw new UnsupportedOperationException(message.getType());
+      }
+    }
+    else
+    {
+      throw new UnsupportedOperationException(message.getType());
     }
   }
 

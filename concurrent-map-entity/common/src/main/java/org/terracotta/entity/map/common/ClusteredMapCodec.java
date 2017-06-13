@@ -23,12 +23,14 @@ import java.io.IOException;
 
 public class ClusteredMapCodec implements MessageCodec<MapOperation, MapResponse> {
 
+  public static final String SOMETHING_WRONG_HAPPENED = "something wrong happened";
+
   @Override
   public byte[] encodeMessage(MapOperation message) throws MessageCodecException {
     try {
       return OperationCodec.encode(message);
     } catch (IOException e) {
-      throw new MessageCodecException("something wrong happend", e);
+      throw new MessageCodecException(SOMETHING_WRONG_HAPPENED, e);
     }
   }
 
@@ -37,7 +39,7 @@ public class ClusteredMapCodec implements MessageCodec<MapOperation, MapResponse
     try {
       return OperationCodec.decode(payload);
     } catch (IOException e) {
-      throw new MessageCodecException("something wrong happend", e);
+      throw new MessageCodecException(SOMETHING_WRONG_HAPPENED, e);
     }
   }
 
@@ -46,7 +48,7 @@ public class ClusteredMapCodec implements MessageCodec<MapOperation, MapResponse
     try {
       return ResponseCodec.encode(response);
     } catch (IOException e) {
-      throw new MessageCodecException("something wrong happend", e);
+      throw new MessageCodecException(SOMETHING_WRONG_HAPPENED, e);
     }
   }
 
@@ -55,7 +57,7 @@ public class ClusteredMapCodec implements MessageCodec<MapOperation, MapResponse
     try {
       return ResponseCodec.decode(payload);
     } catch (IOException e) {
-      throw new MessageCodecException("something wrong happend", e);
+      throw new MessageCodecException(SOMETHING_WRONG_HAPPENED, e);
     }
   }
 }

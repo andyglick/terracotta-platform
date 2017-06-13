@@ -22,6 +22,8 @@ import java.nio.ByteBuffer;
  */
 public class VLQ {
 
+  private VLQ() {}
+
   public static void encode(int value, ByteBuffer out) {
     if (value < 0) {
       throw new IllegalArgumentException("Cannot encode negative values");
@@ -69,15 +71,20 @@ public class VLQ {
   }
 
   public static int encodedSize(int value) {
-    if (value < 0) {
+
+    int parameterValue = value;
+
+    if (parameterValue < 0) {
       throw new IllegalArgumentException("Cannot encode negative values");
     }
+
     int i = 1;
-    while ((value & 0xFFFFFF80) != 0L) {
-      value >>>= 7;
+
+    while ((parameterValue & 0xFFFFFF80) != 0L) {
+      parameterValue >>>= 7;
       i++;
     }
+
     return i;
   }
-
 }

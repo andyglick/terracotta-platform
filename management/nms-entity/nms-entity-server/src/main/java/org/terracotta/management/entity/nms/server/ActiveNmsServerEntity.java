@@ -164,10 +164,13 @@ class ActiveNmsServerEntity extends ActiveProxiedServerEntity<Void, Void, NmsCal
 
   @Override
   public Future<String> call(@ClientId Object callerDescriptor, Context context, String capabilityName, String methodName, Class<?> returnType, Parameter... parameters) {
-    if (context.contains(Stripe.KEY)) {
-      context = context.with(Stripe.KEY, "SINGLE");
+
+    Context parameterContext = context;
+
+    if (parameterContext.contains(Stripe.KEY)) {
+      parameterContext = parameterContext.with(Stripe.KEY, "SINGLE");
     }
-    return CompletableFuture.completedFuture(managementService.sendManagementCallRequest((ClientDescriptor) callerDescriptor, context, capabilityName, methodName, returnType, parameters));
+    return CompletableFuture.completedFuture(managementService.sendManagementCallRequest((ClientDescriptor) callerDescriptor, parameterContext, capabilityName, methodName, returnType, parameters));
   }
 
   private Cluster readCluster() {

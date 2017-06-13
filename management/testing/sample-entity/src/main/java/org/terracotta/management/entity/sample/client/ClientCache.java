@@ -42,13 +42,15 @@ public class ClientCache implements Cache, Closeable {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ClientCache.class);
 
+  private static final String CACHE = "cache";
+
   private final String name;
   private final CacheEntity delegate;
   private final ConcurrentMap<String, String> data = new ConcurrentHashMap<>();
 
-  private final OperationObserver<GetOutcome> getObserver = operation(GetOutcome.class).named("get").of(this).tag("cache").build();
-  private final OperationObserver<PutOutcome> putObserver = operation(PutOutcome.class).named("put").of(this).tag("cache").build();
-  private final OperationObserver<ClearOutcome> clearObserver = operation(ClearOutcome.class).named("clear").of(this).tag("cache").build();
+  private final OperationObserver<GetOutcome> getObserver = operation(GetOutcome.class).named("get").of(this).tag(CACHE).build();
+  private final OperationObserver<PutOutcome> putObserver = operation(PutOutcome.class).named("put").of(this).tag(CACHE).build();
+  private final OperationObserver<ClearOutcome> clearObserver = operation(ClearOutcome.class).named("clear").of(this).tag(CACHE).build();
 
   ClientCache(String name, CacheEntity delegate) {
     this.name = name;
@@ -67,7 +69,7 @@ public class ClientCache implements Cache, Closeable {
     StatisticsManager.createPassThroughStatistic(
         this,
         "size",
-        new HashSet<>(Arrays.asList("ClientCache", "cache")),
+        new HashSet<>(Arrays.asList("ClientCache", CACHE)),
         properties,
         this::size);
   }

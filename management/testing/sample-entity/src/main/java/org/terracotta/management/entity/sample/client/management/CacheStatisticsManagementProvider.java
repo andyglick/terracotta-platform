@@ -50,6 +50,8 @@ class CacheStatisticsManagementProvider extends AbstractManagementProvider<Clien
 
   private final Context parentContext;
 
+  private static final String CACHE = "cache";
+
   CacheStatisticsManagementProvider(Context parentContext) {
     super(ClientCache.class);
     this.parentContext = parentContext;
@@ -101,14 +103,14 @@ class CacheStatisticsManagementProvider extends AbstractManagementProvider<Clien
       this.context = context;
       this.statisticRegistry = new StatisticRegistry(clientCache);
 
-      OperationStatisticDescriptor<CacheOperationOutcomes.GetOutcome> get = OperationStatisticDescriptor.descriptor("get", singleton("cache"), CacheOperationOutcomes.GetOutcome.class);
-      OperationStatisticDescriptor<CacheOperationOutcomes.ClearOutcome> clear = OperationStatisticDescriptor.descriptor("clear", singleton("cache"), CacheOperationOutcomes.ClearOutcome.class);
+      OperationStatisticDescriptor<CacheOperationOutcomes.GetOutcome> get = OperationStatisticDescriptor.descriptor("get", singleton(CACHE), CacheOperationOutcomes.GetOutcome.class);
+      OperationStatisticDescriptor<CacheOperationOutcomes.ClearOutcome> clear = OperationStatisticDescriptor.descriptor("clear", singleton(CACHE), CacheOperationOutcomes.ClearOutcome.class);
 
       statisticRegistry.registerCounter("Cache:HitCount", get, of(CacheOperationOutcomes.GetOutcome.HIT));
       statisticRegistry.registerCounter("Cache:MissCount", get, of(CacheOperationOutcomes.GetOutcome.MISS));
       statisticRegistry.registerCounter("Cache:ClearCount", clear, allOf(CacheOperationOutcomes.ClearOutcome.class));
 
-      statisticRegistry.registerSize("Size", ValueStatisticDescriptor.descriptor("size", singleton("cache")));
+      statisticRegistry.registerSize("Size", ValueStatisticDescriptor.descriptor("size", singleton(CACHE)));
     }
 
     Number queryStatistic(String fullStatisticName) {

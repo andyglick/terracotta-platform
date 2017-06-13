@@ -69,7 +69,8 @@ class VoltronProxyInvocationHandler implements InvocationHandler {
   VoltronProxyInvocationHandler(final EntityClientEndpoint<ProxyEntityMessage, ProxyEntityResponse> entityClientEndpoint, Collection<Class<?>> events, final Codec codec) {
     this.entityClientEndpoint = entityClientEndpoint;
     this.listeners = new ConcurrentHashMap<Class<?>, CopyOnWriteArrayList<MessageListener>>();
-    if (events.size() > 0) {
+
+    if (!events.isEmpty()) {
       for (Class<?> aClass : events) {
         listeners.put(aClass, new CopyOnWriteArrayList<MessageListener>());
       }
@@ -88,12 +89,15 @@ class VoltronProxyInvocationHandler implements InvocationHandler {
 
         @Override
         public byte[] createExtendedReconnectData() {
+
+          byte[] emptyByteArray = new byte[0];
+
           if (endpointListener == null) {
-            return null;
+            return emptyByteArray;
           } else {
             Object state = endpointListener.onReconnect();
             if (state == null) {
-              return null;
+              return emptyByteArray;
             }
             return codec.encode(state.getClass(), state);
           }

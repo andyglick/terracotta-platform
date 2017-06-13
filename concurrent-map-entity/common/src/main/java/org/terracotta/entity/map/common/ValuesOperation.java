@@ -28,8 +28,10 @@ public class ValuesOperation implements MapOperation {
 
   @Override
   public void writeTo(DataOutput output) throws IOException {
+    // Do nothing because nothing to do
   }
 
+  @SuppressWarnings("unused")
   static ValuesOperation readFrom(DataInput input) throws IOException {
     return new ValuesOperation();
   }

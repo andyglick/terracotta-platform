@@ -38,7 +38,8 @@ public class TerracottaClusteredMapService implements EntityServerService<MapOpe
 
   @Override
   public boolean handlesEntityType(String typeName) {
-    return typeName.equals(ConcurrentClusteredMap.class.getName());
+
+    return ConcurrentClusteredMap.class.getName().equals(typeName);
   }
 
   @Override

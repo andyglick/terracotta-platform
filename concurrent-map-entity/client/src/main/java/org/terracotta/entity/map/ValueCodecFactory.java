@@ -23,19 +23,26 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * ValueCodecFactory
  */
 public class ValueCodecFactory {
+
+  private ValueCodecFactory(){}
+
+  private static List<? extends Serializable> classesList =  Arrays.asList(Integer.class, Long.class, Float.class, Double.class, Byte.class,
+    Character.class, String.class);
+
   static <T> ValueCodec<T> getCodecForClass(Class<T> clazz) {
     if (!Serializable.class.isAssignableFrom(clazz)) {
       throw new IllegalArgumentException("The provided type is invalid as it is not Serializable " + clazz);
     }
-    if (Integer.class.equals(clazz) || Long.class.equals(clazz)
-        || Float.class.equals(clazz) || Double.class.equals(clazz)
-        || Byte.class.equals(clazz) || Character.class.equals(clazz)
-        || clazz.isPrimitive() || String.class.equals(clazz)) {
+
+    if (classesList.contains(clazz) || clazz.isPrimitive())
+    {
       return new IdentityCodec<T>();
     } else {
       return new SerializationWrapperCodec<T>();
@@ -70,7 +77,7 @@ public class ValueCodecFactory {
         } finally {
           oos.close();
         }
-      } catch(IOException e) {
+      } catch(IOException ignore) {
         // ignore
       }
       return new ValueWrapper(input.hashCode(), baos.toByteArray());
@@ -85,17 +92,22 @@ public class ValueCodecFactory {
       ByteArrayInputStream bais = new ByteArrayInputStream(data.getValue());
       try {
         ObjectInputStream ois = new ObjectInputStream(bais);
-        try {
-          return (T) ois.readObject();
-        } catch (ClassNotFoundException e) {
-          throw new RuntimeException("Could not load class", e);
-        } finally {
-          ois.close();
-        }
-      } catch(IOException e) {
+        return getT(ois);
+      } catch(IOException ignore) {
         // ignore
       }
       throw new AssertionError("Cannot reach here!");
+    }
+
+    private T getT(ObjectInputStream ois) throws IOException
+    {
+      try {
+        return (T) ois.readObject();
+      } catch (ClassNotFoundException e) {
+        throw new RuntimeException("Could not load class", e);
+      } finally {
+        ois.close();
+      }
     }
   }
 }
